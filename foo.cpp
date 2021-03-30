@@ -65,7 +65,7 @@ static std::vector<std::string> gen_strings(const int32_t count,
 
     for (int32_t i = 0; i < count; i++)
     {
-        int32_t length = std::rand() % (max_len - min_len);
+        int32_t length = std::rand() % ((max_len - min_len) + 1);
         length += min_len;
 
         result.push_back(gen_string(length, newline_rate_percent));
@@ -106,17 +106,7 @@ std::string& using_erase_remove_if(std::string& aString)
 {
     aString.erase(std::remove_if(aString.begin(),
                                  aString.end(),
-                                 [](const char c)
-                                 {
-                                     if (c == '\n' || c == '\r')
-                                     {
-                                         return true;
-                                     }
-                                     else
-                                     {
-                                         return false;
-                                     }
-                                 }),
+                                 [](const char c) { return (c == '\n' || c == '\r') ? true : false; }),
                   aString.end());
     return aString;
 }
