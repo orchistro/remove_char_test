@@ -13,6 +13,8 @@
 #include <chrono>
 #include <locale>
 
+#include <boost/algorithm/string/classification.hpp>
+
 static std::string get_newline(const int32_t dice)
 {
     if (dice == 0)
@@ -121,6 +123,13 @@ std::string& using_erase_remove_if(std::string& aString)
     return aString;
 }
 
+std::string& using_erase_remove_if_with_boostany(std::string& aString)
+{
+    aString.erase(std::remove_if(aString.begin(),
+                                 aString.end(),
+                                 boost::is_any_of("\r\n")), aString.end());
+    return aString;
+}
 typedef std::string& method_func(std::string&);
 
 static void test(method_func* method, const char* method_name, std::vector<std::string> vec)
@@ -175,10 +184,11 @@ int32_t main(int32_t argc, char* argv[])
 
     for (int32_t i = 0; i < 4; i++)
     {
-        test(removeNewLineChar,                      "original       ", vec);
-        test(using_erase_remove_idiom_for_each_char, "erase_remove   ", vec);
-        test(using_erase_remove_if,                  "erase_remove_if", vec);
-
+        std::cout << ">>> Round " << i << "\n";
+        test(removeNewLineChar,                      "original              ", vec);
+        test(using_erase_remove_idiom_for_each_char, "erase_remove          ", vec);
+        test(using_erase_remove_if,                  "erase_remove_if       ", vec);
+        test(using_erase_remove_if_with_boostany,    "erase_remove_boost_any", vec);
     }
 
     return 0;

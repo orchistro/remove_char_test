@@ -18,7 +18,7 @@ foo: $(OBJS)
 	gcc -o $@ $^ -lstdc++ -Wall
 
 %.o: %.cpp
-	gcc -std=c++17 -c -g -O$(OPTIMIZE_LEVE) -Wall -o $@ $<
+	gcc -std=c++17 -I../../index.1/externals/libboost/include -c -g -O$(OPTIMIZE_LEVE) -Wall -o $@ $<
 
 clean:
 	rm -rf foo *.o core*
