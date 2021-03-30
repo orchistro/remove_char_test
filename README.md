@@ -224,6 +224,162 @@ However, if the program in compiled with clang, the difference is not that big.
 
 ## Result with clang
 ### No optimization
+```bash
+user@YoungHwiMBP13.local:~/work/orchistro/remove_char_test$ make clean
+rm -rf foo *.o core*
+
+user@YoungHwiMBP13.local:~/work/orchistro/remove_char_test$ make
+gcc -std=c++17 -I/usr/local/boost_1_75_0 -c -g -O0 -Wall -o foo.o foo.cpp
+gcc -o foo foo.o -lstdc++ -Wall
+
+user@YoungHwiMBP13.local:~/work/orchistro/remove_char_test$ ./foo 1000000 5 500 5 2>/dev/null
+Generating 1,000,000 strings of length 5 ~ 500 with newline char rate 5%
+>>> Round 0
+Testing with method original                  --> Took 10,800,744us (10,800ms)
+Testing with method erase_remove              --> Took 17,059,577us (17,059ms)
+Testing with method erase_remove_if           --> Took 13,032,540us (13,032ms)
+Testing with method erase_remove_boost_any    --> Took 19,503,900us (19,503ms)
+>>> Round 1
+Testing with method original                  --> Took 10,379,416us (10,379ms)
+Testing with method erase_remove              --> Took 16,306,645us (16,306ms)
+Testing with method erase_remove_if           --> Took 12,989,120us (12,989ms)
+Testing with method erase_remove_boost_any    --> Took 20,337,214us (20,337ms)
+>>> Round 2
+Testing with method original                  --> Took 10,397,247us (10,397ms)
+Testing with method erase_remove              --> Took 16,270,365us (16,270ms)
+Testing with method erase_remove_if           --> Took 12,851,713us (12,851ms)
+Testing with method erase_remove_boost_any    --> Took 19,490,466us (19,490ms)
+>>> Round 3
+Testing with method original                  --> Took 10,393,555us (10,393ms)
+Testing with method erase_remove              --> Took 16,311,876us (16,311ms)
+Testing with method erase_remove_if           --> Took 12,852,402us (12,852ms)
+Testing with method erase_remove_boost_any    --> Took 19,484,233us (19,484ms)
+
+user@YoungHwiMBP13.local:~/work/orchistro/remove_char_test$ ./foo 1000000 5 500 15 2>/dev/null
+Generating 1,000,000 strings of length 5 ~ 500 with newline char rate 15%
+>>> Round 0
+Testing with method original                  --> Took 14,806,878us (14,806ms)
+Testing with method erase_remove              --> Took 17,221,304us (17,221ms)
+Testing with method erase_remove_if           --> Took 13,641,930us (13,641ms)
+Testing with method erase_remove_boost_any    --> Took 21,308,409us (21,308ms)
+>>> Round 1
+Testing with method original                  --> Took 14,768,055us (14,768ms)
+Testing with method erase_remove              --> Took 17,976,388us (17,976ms)
+Testing with method erase_remove_if           --> Took 13,825,593us (13,825ms)
+Testing with method erase_remove_boost_any    --> Took 20,815,417us (20,815ms)
+>>> Round 2
+Testing with method original                  --> Took 13,890,850us (13,890ms)
+Testing with method erase_remove              --> Took 16,699,139us (16,699ms)
+Testing with method erase_remove_if           --> Took 13,230,131us (13,230ms)
+Testing with method erase_remove_boost_any    --> Took 20,809,619us (20,809ms)
+>>> Round 3
+Testing with method original                  --> Took 13,830,687us (13,830ms)
+Testing with method erase_remove              --> Took 16,672,909us (16,672ms)
+Testing with method erase_remove_if           --> Took 13,223,921us (13,223ms)
+Testing with method erase_remove_boost_any    --> Took 20,843,971us (20,843ms)
+
+user@YoungHwiMBP13.local:~/work/orchistro/remove_char_test$ ./foo 1000000 5 500 25 2>/dev/null
+Generating 1,000,000 strings of length 5 ~ 500 with newline char rate 25%
+>>> Round 0
+Testing with method original                  --> Took 16,938,597us (16,938ms)
+Testing with method erase_remove              --> Took 16,846,264us (16,846ms)
+Testing with method erase_remove_if           --> Took 13,613,670us (13,613ms)
+Testing with method erase_remove_boost_any    --> Took 22,522,206us (22,522ms)
+>>> Round 1
+Testing with method original                  --> Took 17,874,757us (17,874ms)
+Testing with method erase_remove              --> Took 17,235,211us (17,235ms)
+Testing with method erase_remove_if           --> Took 14,383,702us (14,383ms)
+Testing with method erase_remove_boost_any    --> Took 22,886,358us (22,886ms)
+>>> Round 2
+Testing with method original                  --> Took 17,919,296us (17,919ms)
+Testing with method erase_remove              --> Took 17,124,029us (17,124ms)
+Testing with method erase_remove_if           --> Took 13,923,567us (13,923ms)
+Testing with method erase_remove_boost_any    --> Took 22,145,827us (22,145ms)
+>>> Round 3
+Testing with method original                  --> Took 16,928,790us (16,928ms)
+Testing with method erase_remove              --> Took 16,841,302us (16,841ms)
+Testing with method erase_remove_if           --> Took 13,561,631us (13,561ms)
+Testing with method erase_remove_boost_any    --> Took 21,792,260us (21,792ms)
+```
 ### Optimize level 2
 
 ```
+user@YoungHwiMBP13.local:~/work/orchistro/remove_char_test$ make clean
+rm -rf foo *.o core*
+user@YoungHwiMBP13.local:~/work/orchistro/remove_char_test$ make release
+gcc -std=c++17 -I/usr/local/boost_1_75_0 -c -g -O2 -Wall -o foo.o foo.cpp
+gcc -o foo foo.o -lstdc++ -Wall
+
+user@YoungHwiMBP13.local:~/work/orchistro/remove_char_test$ ./foo 1000000 5 500 5 2>/dev/null
+Generating 1,000,000 strings of length 5 ~ 500 with newline char rate 5%
+>>> Round 0
+Testing with method original                  --> Took 8,445,959us (8,445ms)
+Testing with method erase_remove              --> Took 8,226,856us (8,226ms)
+Testing with method erase_remove_if           --> Took 8,096,390us (8,096ms)
+Testing with method erase_remove_boost_any    --> Took 8,667,014us (8,667ms)
+>>> Round 1
+Testing with method original                  --> Took 8,331,226us (8,331ms)
+Testing with method erase_remove              --> Took 8,239,155us (8,239ms)
+Testing with method erase_remove_if           --> Took 8,116,968us (8,116ms)
+Testing with method erase_remove_boost_any    --> Took 8,987,749us (8,987ms)
+>>> Round 2
+Testing with method original                  --> Took 8,331,693us (8,331ms)
+Testing with method erase_remove              --> Took 8,440,747us (8,440ms)
+Testing with method erase_remove_if           --> Took 8,162,852us (8,162ms)
+Testing with method erase_remove_boost_any    --> Took 8,729,798us (8,729ms)
+>>> Round 3
+Testing with method original                  --> Took 8,350,700us (8,350ms)
+Testing with method erase_remove              --> Took 8,274,069us (8,274ms)
+Testing with method erase_remove_if           --> Took 8,262,806us (8,262ms)
+Testing with method erase_remove_boost_any    --> Took 9,010,445us (9,010ms)
+
+user@YoungHwiMBP13.local:~/work/orchistro/remove_char_test$ ./foo 1000000 5 500 15 2>/dev/null
+Generating 1,000,000 strings of length 5 ~ 500 with newline char rate 15%
+>>> Round 0
+Testing with method original                  --> Took 9,003,498us (9,003ms)
+Testing with method erase_remove              --> Took 8,594,203us (8,594ms)
+Testing with method erase_remove_if           --> Took 8,498,830us (8,498ms)
+Testing with method erase_remove_boost_any    --> Took 9,110,057us (9,110ms)
+>>> Round 1
+Testing with method original                  --> Took 8,974,953us (8,974ms)
+Testing with method erase_remove              --> Took 8,546,732us (8,546ms)
+Testing with method erase_remove_if           --> Took 8,485,280us (8,485ms)
+Testing with method erase_remove_boost_any    --> Took 9,145,824us (9,145ms)
+>>> Round 2
+Testing with method original                  --> Took 8,988,653us (8,988ms)
+Testing with method erase_remove              --> Took 8,543,445us (8,543ms)
+Testing with method erase_remove_if           --> Took 8,473,134us (8,473ms)
+Testing with method erase_remove_boost_any    --> Took 9,094,286us (9,094ms)
+>>> Round 3
+Testing with method original                  --> Took 8,994,202us (8,994ms)
+Testing with method erase_remove              --> Took 8,532,946us (8,532ms)
+Testing with method erase_remove_if           --> Took 8,485,678us (8,485ms)
+Testing with method erase_remove_boost_any    --> Took 9,092,812us (9,092ms)
+
+user@YoungHwiMBP13.local:~/work/orchistro/remove_char_test$ ./foo 1000000 5 500 25 2>/dev/null
+Generating 1,000,000 strings of length 5 ~ 500 with newline char rate 25%
+>>> Round 0
+Testing with method original                  --> Took 9,525,744us (9,525ms)
+Testing with method erase_remove              --> Took 8,840,854us (8,840ms)
+Testing with method erase_remove_if           --> Took 8,804,580us (8,804ms)
+Testing with method erase_remove_boost_any    --> Took 9,463,020us (9,463ms)
+>>> Round 1
+Testing with method original                  --> Took 9,491,361us (9,491ms)
+Testing with method erase_remove              --> Took 8,913,802us (8,913ms)
+Testing with method erase_remove_if           --> Took 8,833,574us (8,833ms)
+Testing with method erase_remove_boost_any    --> Took 9,513,317us (9,513ms)
+>>> Round 2
+Testing with method original                  --> Took 9,496,040us (9,496ms)
+Testing with method erase_remove              --> Took 8,831,773us (8,831ms)
+Testing with method erase_remove_if           --> Took 8,824,176us (8,824ms)
+Testing with method erase_remove_boost_any    --> Took 9,470,915us (9,470ms)
+>>> Round 3
+Testing with method original                  --> Took 9,529,897us (9,529ms)
+Testing with method erase_remove              --> Took 8,917,767us (8,917ms)
+Testing with method erase_remove_if           --> Took 8,833,763us (8,833ms)
+Testing with method erase_remove_boost_any    --> Took 9,464,065us (9,464ms)
+```
+
+## Conclusion
+
+Use `erase(remove_if())` with lambda.
